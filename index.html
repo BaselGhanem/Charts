@@ -17,9 +17,9 @@
             theme: {
                 extend: {
                     colors: {
-                        'x-primary': '#107c41',       /* لون إكسل الرسمي */
+                        'x-primary': '#107c41',
                         'x-primary-dark': '#0b5c30',
-                        'x-secondary': '#fbbf24',     /* لون ذهبي */
+                        'x-secondary': '#fbbf24',
                         'x-light': '#f0fdf4',
                         'male-blue': '#3b82f6',
                         'female-pink': '#ec4899',
@@ -51,7 +51,6 @@
     <style>
         body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; overflow-x: hidden; scroll-behavior: smooth; }
         
-        /* Gender Selection Styles */
         .gender-option {
             transition: all 0.3s ease;
             cursor: pointer;
@@ -64,14 +63,12 @@
         }
         .gender-option:hover { transform: translateY(-3px); }
         
-        /* Male Selected */
         .gender-option[data-type="male"].selected {
             border-color: #3b82f6;
             background-color: #eff6ff;
         }
         .gender-option[data-type="male"].selected i { color: #3b82f6; }
 
-        /* Female Selected */
         .gender-option[data-type="female"].selected {
             border-color: #ec4899;
             background-color: #fdf2f8;
@@ -91,21 +88,27 @@
             z-index: 9999; animation: fadeIn 0.3s;
         }
 
+        /* تم تعديل الستايل ليتناسب مع الكونتينر الجديد */
+        #toast-container {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            z-index: 10000; display: flex; flex-direction: column; gap: 10px;
+            pointer-events: none; width: 90%; max-width: 400px;
+        }
+        
         .toast { 
-            position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
             background: white; padding: 12px 24px; border-radius: 50px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
             display: flex; align-items: center; gap: 12px;
-            font-weight: bold; z-index: 9999; opacity: 0; transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            width: 90%; max-width: 400px; border: 1px solid #e5e7eb;
+            font-weight: bold; opacity: 0; transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            border: 1px solid #e5e7eb; transform: translateY(-20px);
+            pointer-events: auto;
         }
-        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        .toast.show { transform: translateY(0); opacity: 1; }
         .toast.success { border-right: 6px solid #107c41; color: #065f46; }
         .toast.error { border-right: 6px solid #ef4444; color: #991b1b; }
 
         .progress-ring__circle { transition: stroke-dashoffset 0.5s ease-in-out; transform: rotate(-90deg); transform-origin: 50% 50%; }
         
-        /* شهادة محددة الألوان */
         #certificate-content {
             background: white !important;
             color: #1f2937 !important;
@@ -153,7 +156,7 @@
         </div>
     </div>
 
-    <div id="toast-box" class="toast"></div>
+    <div id="toast-container"></div>
 
     <header class="bg-white border-b border-gray-200 sticky top-0 z-40 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -168,7 +171,7 @@
 
                 <div class="flex items-center gap-2 md:gap-4">
                     <div id="user-display" class="hidden md:flex items-center gap-2 bg-green-50 px-4 py-1.5 rounded-full border border-green-100">
-                        </div>
+                    </div>
                     <button onclick="toggleLanguage()" class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 text-sm font-bold text-gray-600 transition">
                         <i data-lucide="languages" class="w-4 h-4"></i> <span id="lang-btn">EN</span>
                     </button>
@@ -278,7 +281,7 @@
     <script>
         const state = {
             lang: 'ar',
-            gender: 'male', // Default
+            gender: 'male', 
             currentSection: 'hero',
             completedSections: new Set(),
             userName: null,
@@ -290,7 +293,6 @@
             lessonCompletedMessages: new Set()
         };
 
-        // --- Localization Data (Split for Male/Female) ---
         const t = {
             ar_male: {
                 modal: { t: 'يا هلا بيك يا معلم!', d: 'عشان نبلش شغل المحترفين، سجل اسمك.', p: 'الاسم الكريم..', b: 'يلا نبلش 🚀' },
@@ -306,7 +308,7 @@
                     leaderboard: 'لوحة الوحوش', stats: 'إحصائياتك'
                 },
                 nav: { hero: 'الرئيسية', p1: 'قسم 1: تعدد الصفحات', p2: 'قسم 2: الرسوم البيانية', quiz: 'الاختبار النهائي' },
-                lessons: { /* Shared text mostly, specific verbs updated below */ },
+                lessons: { },
                 common: {
                     progress: 'نسبة الإنجاز', lesson: 'درس', learn: 'شو رح تتعلم؟', task: 'التحدي', taskSub: 'طبق اللي تعلمته', 
                     scenario: 'السيناريو:', choose: 'الحل الأنسب:', placeholder: 'النتيجة رح تظهر هون..', 
@@ -338,7 +340,7 @@
                     leaderboard: 'لوحة المتصدرات', stats: 'إحصائياتك'
                 },
                 nav: { hero: 'الرئيسية', p1: 'قسم 1: تعدد الصفحات', p2: 'قسم 2: الرسوم البيانية', quiz: 'الاختبار النهائي' },
-                lessons: { /* Will dynamically inherit and override verbs */ },
+                lessons: { },
                 common: {
                     progress: 'نسبة الإنجاز', lesson: 'درس', learn: 'شو رح تتعلمي؟', task: 'التحدي', taskSub: 'طبقي اللي تعلمتيه', 
                     scenario: 'السيناريو:', choose: 'الحل الأنسب:', placeholder: 'النتيجة رح تظهر هون..', 
@@ -357,7 +359,6 @@
                 quiz: { t: 'اختبار المعلمات النهائي' }
             },
             en: {
-                // Neutral English
                 modal: { t: 'Welcome!', d: 'Enter your name to start.', p: 'Your Name...', b: 'Let\'s Start 🚀' },
                 hero: { title: 'Excel Master Class', sub: 'Comprehensive: Multi-Sheets + Charts', welcome: 'Welcome', desc: 'Master Multi-Sheet Grouping logic and visualize data professionally with 8 chart types.', btn: 'Start Course', f1: 'Sheet Management', f1d: 'Control entire workbook instantly.', f2: 'Data Viz', f2d: 'Turn numbers into stories.', f3: 'Certificate', f3d: 'Prove your dual skills.', leaderboard: 'Leaderboard', stats: 'Your Stats' },
                 nav: { hero: 'Home', p1: 'Part 1: Multi-Sheets', p2: 'Part 2: Charts', quiz: 'Final Quiz' },
@@ -366,7 +367,6 @@
             }
         };
 
-        // Shared Lesson Data (Neutral Arabic Base) - Updated dynamically for gender
         const lessonsBase = {
             'grouping': { t: 'التحديد (Ctrl & Select)', d: 'تعديل 5 شهور بكبسة واحدة.', p: ['Ctrl + Click لتحديد صفحات.', 'تكتب المعادلة مرة، بتنكتب عند الكل.', 'Shift + Click لتحديد نطاق صفحات.', 'الوضع الجماعي يظهر بشريط العنوان.'], s: 'بدك تضيف مجموع المبيعات لـ 3 شهور مرة واحدة.', o: ['نسخ ولصق', 'Ctrl + Grouping', 'كتابة يدوية'], realExample: 'شركة: تعديل أسعار 50 منتج في 12 فرع دفعة واحدة.', extra: 'جرب: اضغط Ctrl واختر صفحات Jan وFeb وMar معاً' },
             'formatting': { t: 'تحديد الكل (Select All)', d: 'توحيد ألوان وحدود 20 صفحة.', p: ['Right Click -> Select All Sheets.', 'أي تنسيق بتعمله بنسخ للكل فوراً.', 'Format Painter يعمل مع Grouping.', 'تعديل Column Width للكل مرة واحدة.'], s: 'مديرك طلب تلوين العناوين وعمل Borders للكل.', o: ['Select All & Format', 'Macro', 'واحد واحد'], realExample: 'بنك: توحيد تقارير 30 فرع لألوان وخطوط موحدة.', extra: 'تلميح: بعد Select All، غير لون الخلفية وشوف التغيير بكل الصفحات' },
@@ -378,11 +378,9 @@
             'relationships': { t: 'العلاقات المعقدة', d: 'تقييم خصائص متعددة.', p: ['Radar: لتقييم المهارات (شبكة العنكبوت).', 'Scatter: للعلاقة بين متغيرين.', 'Bubble: ثلاث أبعاد (X, Y, Size).', 'Heatmap: كثافة البيانات.'], s: 'تقييم موظف بـ 5 مهارات (تواصل، تقنية، التزام..).', o: ['Radar', 'Line', 'Column'], dataLabels: ['تواصل','تقنية','فريق','وقت','عمل'], realExample: 'موارد بشرية: مقارنة أداء 50 موظف بـ 8 معايير.', extra: 'تفاعلي: حرك نقاط الـ Scatter لترى العلاقة تتغير' }
         };
 
-        // Populate lessons with Base text (Logic to adapt gender verbs handled in render)
         t.ar_male.lessons = lessonsBase;
-        t.ar_female.lessons = lessonsBase; // We will handle conjugation in render logic if needed, or simple strings are neutral enough
+        t.ar_female.lessons = lessonsBase;
         
-        // English Lessons
         const enLessons = {
             'grouping': { t: 'Grouping (Ctrl)', d: 'Edit 5 months in one click.', p: ['Ctrl + Click sheets.', 'Write formula once.', 'Shift + Click range.', 'Group mode title.'], s: 'SUM sales for 3 months at once.', o: ['Copy Paste', 'Ctrl + Grouping', 'Manual'], realExample: 'Retail: Adjust prices in 12 branches.', extra: 'Try: Ctrl + Select Jan, Feb, Mar' },
             'formatting': { t: 'Select All Sheets', d: 'Unified format.', p: ['Right Click Select All.', 'Format replicates.', 'Painter works.', 'Column Width too.'], s: 'Blue headers for all agents.', o: ['Select All & Format', 'Macro', 'One by one'], realExample: 'Bank: Unify report styles.', extra: 'Tip: Change BG color after selecting all' },
@@ -431,14 +429,9 @@
 
         const chartConfig = { column: {type:'bar'}, bar: {type:'bar', indexAxis:'y'}, line: {type:'line'}, pie: {type:'pie'}, radar: {type:'radar'}, scatter: {type:'scatter'} };
 
-        // --- Logic ---
-
         function init() {
             lucide.createIcons();
-            // Start with Auth Modal
             document.getElementById('auth-modal').style.display = 'flex';
-            
-            // Initial Texts setup based on default male
             updateModalTexts();
 
             document.getElementById('login-form').addEventListener('submit', (e) => {
@@ -449,7 +442,6 @@
                     document.getElementById('auth-modal').style.display = 'none';
                     document.getElementById('cert-name').textContent = name;
                     
-                    // Setup Header User Icon
                     const userDisplay = document.getElementById('user-display');
                     const iconName = state.gender === 'female' ? 'user-circle' : 'user';
                     const colorClass = state.gender === 'female' ? 'text-pink-600' : 'text-blue-600';
@@ -479,7 +471,6 @@
             document.querySelector('#auth-modal p').textContent = T.modal.d;
             document.querySelector('#start-btn-text').textContent = T.modal.b;
             
-            // Adjust colors based on gender
             const h2 = document.querySelector('#auth-modal h2');
             if(state.lang === 'ar' && state.gender === 'female') {
                 h2.classList.add('text-pink-600'); h2.classList.remove('text-gray-800');
@@ -549,7 +540,6 @@
             const container = document.getElementById('content-area');
             const T = getContent();
             
-            // Animation Reset
             container.classList.remove('animate-slide-in');
             void container.offsetWidth;
             container.classList.add('animate-slide-in');
@@ -683,7 +673,7 @@
                  document.getElementById(`extra-${key}`).classList.remove('hidden');
                  document.getElementById(`next-${key}`).classList.remove('hidden');
                  document.getElementById(`next-${key}`).classList.add('flex');
-                 selectOption(key, C.correct === 'opt2' && C.type === 'excel' ? 'opt2' : (C.type==='chart' ? C.correct : 'opt1'), true); // Re-render correct state visual
+                 selectOption(key, C.correct === 'opt2' && C.type === 'excel' ? 'opt2' : (C.type==='chart' ? C.correct : 'opt1'), true);
             }
         }
 
@@ -691,13 +681,11 @@
             state.tempSelection = optId;
             const config = lessonsConfig[key];
             
-            // UI Update
             document.querySelectorAll(`#options-${key} button`).forEach(b => {
                 b.classList.remove('ring-4', 'ring-blue-200', 'bg-blue-50');
             });
             document.getElementById(`btn-${optId}`).classList.add('ring-4', 'ring-blue-200', 'bg-blue-50');
 
-            // Visual Update
             document.getElementById(`placeholder-${key}`).classList.add('hidden');
             if (config.type === 'excel') {
                 document.getElementById(`excel-content-${key}`).classList.remove('hidden');
@@ -743,9 +731,7 @@
             const el = document.getElementById(`excel-content-${key}`);
             const S = state.lang === 'ar' ? SimText.ar : SimText.en;
             
-            // Simple Excel Grid generation based on Type
             let content = '';
-            // (Simplified for brevity - adapting logic from original code)
             const style = isCorrect ? "border-green-500 bg-green-50" : "border-red-300";
             
             if(type === 'grouping' || type === '3dsum') {
@@ -786,7 +772,6 @@
                     document.getElementById(`next-${key}`).classList.add('flex');
                     document.getElementById(`verify-${key}`).classList.add('hidden');
                     
-                    // Style the button
                     document.getElementById(`btn-${state.tempSelection}`).classList.replace('ring-blue-200', 'ring-green-500');
                     document.getElementById(`btn-${state.tempSelection}`).classList.replace('bg-blue-50', 'bg-green-50');
                     
@@ -834,7 +819,6 @@
         }
 
         function submitQuiz() {
-            // Dummy logic - passing score 3/4
             let score = 0;
             for(let i=0; i<4; i++) {
                 if(document.querySelector(`input[name="q${i}"]:checked`)) score++;
@@ -897,9 +881,29 @@
                 </div>
             `).join('');
             
-            // Random user rank
             document.getElementById('user-rank').textContent = '#42';
             document.getElementById('user-score-display').querySelector('p:last-child').textContent = state.xp;
+        }
+
+        function showToast(m, type) {
+            const el = document.createElement('div'); 
+            el.className = `toast ${type}`;
+            el.innerHTML = type === 'success' 
+                ? `<i data-lucide="check-circle" class="w-5 h-5 text-green-500"></i> ${m}` 
+                : `<i data-lucide="x-circle" class="w-5 h-5 text-red-500"></i> ${m}`;
+            
+            // Fix: ensure container exists
+            const container = document.getElementById('toast-container');
+            if(container) {
+                container.appendChild(el); 
+                lucide.createIcons();
+                
+                setTimeout(() => el.classList.add('show'), 10);
+                setTimeout(() => {
+                    el.classList.remove('show');
+                    setTimeout(() => el.remove(), 400);
+                }, 3000);
+            }
         }
 
         function downloadCert() {
